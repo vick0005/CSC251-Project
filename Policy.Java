@@ -2,146 +2,139 @@ public class Policy
 {
    private String policyNumber;
    private String providerName;
-   private String firstName;
-   private String lastName;
-   private int age;
-   private String smokingStatus;
-   private double height;
-   private double weight;
+   private PolicyHolder policyHolder;
+   private static int policyCount = 0;
 
-   // No-argument constructor
+   /**
+      Creates a Policy object with default values.
+   */
    public Policy()
    {
       policyNumber = "";
       providerName = "";
-      firstName = "";
-      lastName = "";
-      age = 0;
-      smokingStatus = "";
-      height = 0.0;
-      weight = 0.0;
+      policyHolder = new PolicyHolder();
+      policyCount++;
    }
 
-   // Constructor with arguments
+   /**
+      Creates a Policy object with the specified information.
+      @param policyNumber the policy number
+      @param providerName the insurance provider name
+      @param policyHolder the policyholder
+   */
    public Policy(String policyNumber, String providerName,
-                 String firstName, String lastName,
-                 int age, String smokingStatus,
-                 double height, double weight)
+                 PolicyHolder policyHolder)
    {
       this.policyNumber = policyNumber;
       this.providerName = providerName;
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.age = age;
-      this.smokingStatus = smokingStatus;
-      this.height = height;
-      this.weight = weight;
+
+      // Make a copy of the PolicyHolder object for security
+      this.policyHolder = new PolicyHolder(policyHolder);
+
+      policyCount++;
    }
 
+   /**
+      Sets the policy number.
+      @param policyNumber the policy number
+   */
    public void setPolicyNumber(String policyNumber)
    {
       this.policyNumber = policyNumber;
    }
 
+   /**
+      Sets the provider name.
+      @param providerName the insurance provider name
+   */
    public void setProviderName(String providerName)
    {
       this.providerName = providerName;
    }
 
-   public void setFirstName(String firstName)
+   /**
+      Sets the policyholder.
+      @param policyHolder the policyholder
+   */
+   public void setPolicyHolder(PolicyHolder policyHolder)
    {
-      this.firstName = firstName;
+      // Make a copy to prevent security problems
+      this.policyHolder = new PolicyHolder(policyHolder);
    }
 
-   public void setLastName(String lastName)
-   {
-      this.lastName = lastName;
-   }
-
-   public void setAge(int age)
-   {
-      this.age = age;
-   }
-
-   public void setSmokingStatus(String smokingStatus)
-   {
-      this.smokingStatus = smokingStatus;
-   }
-
-   public void setHeight(double height)
-   {
-      this.height = height;
-   }
-
-   public void setWeight(double weight)
-   {
-      this.weight = weight;
-   }
-
+   /**
+      Returns the policy number.
+      @return the policy number
+   */
    public String getPolicyNumber()
    {
       return policyNumber;
    }
 
+   /**
+      Returns the provider name.
+      @return the insurance provider name
+   */
    public String getProviderName()
    {
       return providerName;
    }
 
-   public String getFirstName()
+   /**
+      Returns a copy of the policyholder.
+      @return a copy of the policyholder
+   */
+   public PolicyHolder getPolicyHolder()
    {
-      return firstName;
+      return new PolicyHolder(policyHolder);
    }
 
-   public String getLastName()
+   /**
+      Returns the number of Policy objects created.
+      @return the number of Policy objects
+   */
+   public static int getPolicyCount()
    {
-      return lastName;
+      return policyCount;
    }
 
-   public int getAge()
-   {
-      return age;
-   }
-
-   public String getSmokingStatus()
-   {
-      return smokingStatus;
-   }
-
-   public double getHeight()
-   {
-      return height;
-   }
-
-   public double getWeight()
-   {
-      return weight;
-   }
-
-   public double getBMI()
-   {
-      return (weight * 703) / (height * height);
-   }
-
+   /**
+      Calculates and returns the policy price.
+      @return the policy price
+   */
    public double getPolicyPrice()
    {
       double price = 600.0;
 
-      if (age > 50)
+      if (policyHolder.getAge() > 50)
       {
          price = price + 75;
       }
 
-      if (smokingStatus.equalsIgnoreCase("smoker"))
+      if (policyHolder.getSmokingStatus().equalsIgnoreCase("smoker"))
       {
          price = price + 100;
       }
 
-      if (getBMI() > 35)
+      if (policyHolder.getBMI() > 35)
       {
-         price = price + ((getBMI() - 35) * 20);
+         price = price + ((policyHolder.getBMI() - 35) * 20);
       }
 
       return price;
+   }
+
+   /**
+      Returns information about the Policy object.
+      @return the policy information
+   */
+   public String toString()
+   {
+      String str = "Policy Number: " + policyNumber +
+                   "\nProvider Name: " + providerName +
+                   "\n" + policyHolder +
+                   String.format("\nPolicy Price: $%.2f", getPolicyPrice());
+
+      return str;
    }
 }
